@@ -1,6 +1,7 @@
 I used the 60% threshold (240) in this, but those numbers can be changed before execution.
 
-This script just calculates a probability.  I got if the attacker has 500 Mn out of 5000 total nodes, then the chance that one masternode quorum has 240 attacking nodes is:
+This script just calculates a probability.  I got if the attacker has 500 Mn out of 5000 total nodes, 
+then the chance that one masternode quorum has 240 attacking nodes is:
 
 7.10737466412e-157
 
