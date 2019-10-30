@@ -1,17 +1,14 @@
 #!/usr/bin/python
 from decimal import Decimal
 from math import log
+from math import factorial as fac
 
-def binom(n, m):
-    b = [0] * (n + 1)
-    b[0] = 1
-    for i in xrange(1, n + 1):
-        b[i] = 1
-        j = i - 1
-        while j > 0:
-            b[j] += b[j - 1]
-            j -= 1
-    return b[m]
+def binom(x, y):
+    try:
+        binom = fac(x) // fac(y) // fac(x - y)
+    except ValueError:
+        binom = 0
+    return binom
 
 #Totoal number of masternodes
 mns=5000
