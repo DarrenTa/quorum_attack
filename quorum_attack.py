@@ -40,7 +40,8 @@ for x in range(qmaj,qsz+1):
     print "Number of LLMQs with ", x," Byzinetine nodes:"
     temp = temp + binom(y,x)*binom(mns-y,qsz -x)
     print binom(y,x)*binom(mns-y,qsz-x)
-    print temp
+    #line below was in here for trouble shooting
+    #print temp
 
 
 print "Total number of Byzinetine Quorums" 
