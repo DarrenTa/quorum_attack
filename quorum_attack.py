@@ -1,4 +1,6 @@
 #!/usr/bin/python
+#This script was written by Darren Tapp and optimized by thephez
+
 from decimal import Decimal
 from math import log
 from math import factorial as fac
@@ -10,52 +12,62 @@ def binom(x, y):
         binom = 0
     return binom
 
-#Totoal number of masternodes
-mns=5000
-#Quarum size used for ChainLocks
-qsz=400
-#Number of nodes in a LLMQ needed for a CHainLock
-qmaj=240
 
-print "Assume ", mns," masternodes in total"
+###This function takes inputs and outputs the probability
+#of sucess in one trial
+#pcalc is short for probability calculation
+def pcalc(masternodes,quorumsize,attacksuccess,Byznodes):
+    SampleSpace = binom(masternodes,quorumsize)
+    pctemp=0
+    for x in range(attacksuccess, quorumsize+1):
+        pctemp = pctemp + binom(Byznodes,x)*binom(masternodes-Byznodes,quorumsize-x)
+    #at this junctiure the answer is pctemp/SampleSpace
+    #but that will produce an overflow error.  We use logarithims to
+    #calculate this value
+    return 10 ** (log(pctemp,10)- log(SampleSpace,10))
 
-print "The number of masternodes in a quourm:  ", qsz
+##We evauate the function pcalc(10,5,3,4)
+##print pcalc(10,5,3,4)
+##as a test vector
+##The answer would be [binom(3,4)*binom(2,6)+(binom(4,4)*binom(1,6)]/binom(10,5)
+##[4*15+1*6]/252 = 66/252
+##print float(66)/252
 
-numb = binom(mns,qsz)
-print "Total number of LLMQs:" 
+##quorum size for ChainLocks
+qs = 400
+##Number of masternodes
+mn = 5000
 
-print numb
+##Number of Byzintine nodes assuming 5000 nodes
+Bft = [500,1000,1500]
 
-#Number of attacking nodes
-y = 500
+##Threshold out of quorum of 400
+thresh = 160
 
-print "Assume ", y, " of MNs are Byzintine"
+for j in range(0,3):
+    print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of withholding a chainlock in one trial is ", pcalc(mn,qs,thresh,Bft[j])
 
-temp = 0
+##Now change the # threshold
+thresh = 240
 
-for x in range(qmaj,qsz+1):
-    print "Number of LLMQs with ", x," Byzinetine nodes:"
-    temp = temp + binom(y,x)*binom(mns-y,qsz -x)
-    print binom(y,x)*binom(mns-y,qsz-x)
-    #line below was in here for trouble shooting
-    #print temp
+for j in range(0,3):
+    print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of producing a malicious chainlock is ", pcalc(mn,qs,thresh,Bft[j])
 
 
-print "Total number of Byzinetine Quorums" 
-print temp
+#In the case of a smaller number of masternodes
+mn=2000
 
-print "Log base 10 of above:"
+##Number of Byzintine nodes assuming 2000 nodes
+Bft = [240,400,600]
 
-print log(temp,10)
+##Threshold out of quorum of 400
+thresh = 160
 
-print "Total number of LLMQs"
-print numb
+for j in range(0,3):
+    print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of withholding a chainlock in one trial is ", pcalc(mn,qs,thresh,Bft[j])
 
-print "Log base 10 of above:"
+##Now change the # threshold
+thresh = 240
 
-print log(numb,10)
-
-print "Probabilty of malious ChainLock" 
-
-print 10 ** (log(temp,10)-log(numb,10))
-
+for j in range(0,3):
+    print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of producing a malicious chainlock is ", pcalc(mn,qs,thresh,Bft[j])
